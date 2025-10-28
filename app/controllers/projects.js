@@ -1,10 +1,10 @@
-let UserModel = require('../models/users');
+let ProjectModel = require('../models/projects');
 
-module.exports.getUser = async function (req, res, next) {
+module.exports.getProject = async function (req, res, next) {
   try {
-    let user = await UserModel.findOne({ _id: req.params.id });
+    let project = await ProjectModel.findOne({ _id: req.params.id });
 
-    res.json(user);
+    res.json(project);
 
   } catch (error) {
     console.log(error);
@@ -15,16 +15,16 @@ module.exports.getUser = async function (req, res, next) {
 module.exports.create = async function (req, res, next) {
   try {
 
-    let user = req.body;
+    let project = req.body;
 
-    let result = await UserModel.create(user);
+    let result = await ProjectModel.create(project);
     console.log(result);
 
     res.status(200);
     res.json(
       {
         success: true,
-        message: "User created successfully."
+        message: "Project created successfully."
       }
     );
 
@@ -37,7 +37,7 @@ module.exports.create = async function (req, res, next) {
 
 module.exports.getAll = async function (req, res, next) {
   try {
-    let list = await UserModel.find();
+    let list = await ProjectModel.find();
 
     res.json(list);
   } catch (error) {
@@ -49,9 +49,9 @@ module.exports.getAll = async function (req, res, next) {
 module.exports.update = async function (req, res, next) {
   try {
     console.log(req.body);
-    let updatedUser = UserModel(req.body);
-    updatedUser._id = req.params.id;
-    let result = await UserModel.updateOne({ _id: req.params.id }, updatedUser);
+    let updatedProject = ProjectModel(req.body);
+    updatedProject._id = req.params.id;
+    let result = await ProjectModel.updateOne({ _id: req.params.id }, updatedProject);
     console.log(result);
 
     if (result.modifiedCount > 0) {
@@ -59,11 +59,11 @@ module.exports.update = async function (req, res, next) {
       res.json(
         {
           success: true,
-          message: "User updated successfully."
+          message: "Project updated successfully."
         }
       );
     } else {
-      throw new Error('User not updated. Are you sure it exists?')
+      throw new Error('Project not updated. Are you sure it exists?')
     }
 
   } catch (error) {
@@ -75,7 +75,7 @@ module.exports.update = async function (req, res, next) {
 
 module.exports.remove = async function (req, res, next) {
   try {
-    let result = await UserModel.deleteOne({ _id: req.params.id });
+    let result = await ProjectModel.deleteOne({ _id: req.params.id });
     console.log(result);
 
     if (result.deletedCount > 0) {
@@ -83,11 +83,11 @@ module.exports.remove = async function (req, res, next) {
       res.json(
         {
           success: true,
-          message: "User deleted successfully."
+          message: "Project deleted successfully."
         }
       );
     } else {
-      throw new Error('User not deleted. Are you sure it exists?')
+      throw new Error('Project not deleted. Are you sure it exists?')
     }
 
   } catch (error) {
