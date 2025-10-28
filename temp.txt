@@ -1,3 +1,0 @@
-
-
-mongodb+srv://jazeved5_db_user:VgffN1uwYXJZYRYB@cluster004.spyyzb6.mongodb.net/
