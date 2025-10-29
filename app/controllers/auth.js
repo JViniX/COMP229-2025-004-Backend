@@ -1,6 +1,7 @@
 let UserModel = require('../models/users');
 let jwt = require('jsonwebtoken');
 let config = require('../../config/config');
+let { expressjwt } = require('express-jwt');
 
 module.exports.signin = async function (req, res, next) {
     try {
@@ -38,4 +39,15 @@ module.exports.signin = async function (req, res, next) {
         console.log(error);
         next(error);
     }
+}
+
+module.exports.requireSign = expressjwt({
+    secret: config.SECRETKEY,
+    algorithms: ['HS512'],
+    userProperty: 'auth'
+})
+
+module.exports.logtoken = async function (req, res, next) {
+    console.log(req.headers);
+    next();
 }
