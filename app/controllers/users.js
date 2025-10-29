@@ -24,7 +24,8 @@ module.exports.create = async function (req, res, next) {
     res.json(
       {
         success: true,
-        message: "User created successfully."
+        message: "User created successfully.",
+        user: result
       }
     );
 
