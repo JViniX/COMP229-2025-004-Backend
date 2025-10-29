@@ -8,6 +8,8 @@ var db = require('./config/db');
 var userRouter = require('./app/routers/users');
 var indexRouter = require('./app/routers/index');
 var projectRouter = require('./app/routers/projects');
+var authRouter = require('./app/routers/auth');
+var inventoryRouter = require('./app/routers/inventory');
 
 var app = express();
 
@@ -21,6 +23,8 @@ app.use(logger('dev'));
 app.use('/', indexRouter);
 app.use('/api/users', userRouter);
 app.use('/api/projects', projectRouter);
+app.use('/auth', authRouter);
+app.use('/api/inventory', inventoryRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

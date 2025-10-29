@@ -1,10 +1,10 @@
-let UserModel = require('../models/users');
+let InventoryModel = require('../models/inventory');
 
-module.exports.getUser = async function (req, res, next) {
+module.exports.getInventory = async function (req, res, next) {
   try {
-    let user = await UserModel.findOne({ _id: req.params.id });
+    let inventory = await InventoryModel.findOne({ _id: req.params.id });
 
-    res.json(user);
+    res.json(inventory);
 
   } catch (error) {
     console.log(error);
@@ -15,17 +15,18 @@ module.exports.getUser = async function (req, res, next) {
 module.exports.create = async function (req, res, next) {
   try {
 
-    let user = req.body;
+    let inventory = req.body;
+    inventory.tags = req.body.tags.split(",").map(word => word.trim());
+    inventory.owner = req.auth.id;
 
-    let result = await UserModel.create(user);
+    let result = await InventoryModel.create(inventory);
     console.log(result);
 
     res.status(200);
     res.json(
       {
         success: true,
-        message: "User created successfully.",
-        user: result
+        message: "Inventory created successfully."
       }
     );
 
@@ -38,7 +39,7 @@ module.exports.create = async function (req, res, next) {
 
 module.exports.getAll = async function (req, res, next) {
   try {
-    let list = await UserModel.find();
+    let list = await InventoryModel.find().populate('owner');
 
     res.json(list);
   } catch (error) {
@@ -50,9 +51,9 @@ module.exports.getAll = async function (req, res, next) {
 module.exports.update = async function (req, res, next) {
   try {
     console.log(req.body);
-    let updatedUser = UserModel(req.body);
-    updatedUser._id = req.params.id;
-    let result = await UserModel.updateOne({ _id: req.params.id }, updatedUser);
+    let updatedInventory = InventoryModel(req.body);
+    updatedInventory._id = req.params.id;
+    let result = await InventoryModel.updateOne({ _id: req.params.id }, updatedInventory);
     console.log(result);
 
     if (result.modifiedCount > 0) {
@@ -60,11 +61,11 @@ module.exports.update = async function (req, res, next) {
       res.json(
         {
           success: true,
-          message: "User updated successfully."
+          message: "Inventory updated successfully."
         }
       );
     } else {
-      throw new Error('User not updated. Are you sure it exists?')
+      throw new Error('Inventory not updated. Are you sure it exists?')
     }
 
   } catch (error) {
@@ -76,7 +77,7 @@ module.exports.update = async function (req, res, next) {
 
 module.exports.remove = async function (req, res, next) {
   try {
-    let result = await UserModel.deleteOne({ _id: req.params.id });
+    let result = await InventoryModel.deleteOne({ _id: req.params.id });
     console.log(result);
 
     if (result.deletedCount > 0) {
@@ -84,11 +85,11 @@ module.exports.remove = async function (req, res, next) {
       res.json(
         {
           success: true,
-          message: "User deleted successfully."
+          message: "Inventory deleted successfully."
         }
       );
     } else {
-      throw new Error('User not deleted. Are you sure it exists?')
+      throw new Error('Inventory not deleted. Are you sure it exists?')
     }
 
   } catch (error) {
