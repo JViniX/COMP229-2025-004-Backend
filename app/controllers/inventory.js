@@ -1,4 +1,5 @@
 let InventoryModel = require('../models/inventory');
+let UserModel = require('../models/users');
 
 module.exports.getInventory = async function (req, res, next) {
   try {
@@ -39,7 +40,7 @@ module.exports.create = async function (req, res, next) {
 
 module.exports.getAll = async function (req, res, next) {
   try {
-    let list = await InventoryModel.find().populate('owner');
+    let list = await InventoryModel.find(); //.populate('owner');
 
     res.json(list);
   } catch (error) {
@@ -96,4 +97,41 @@ module.exports.remove = async function (req, res, next) {
     console.log(error);
     next(error);
   }
+}
+
+module.exports.hasAuthorization = async function(req, res, next){
+    try {
+        let id = req.params.id
+        let inventoryItem = await InventoryModel.findById(id).populate('owner');
+        console.log(inventoryItem);
+
+        // If there is no item found.
+        if (inventoryItem == null) {
+            throw new Error('Item not found.') // Express will catch this on its own.
+        }
+        else if (inventoryItem.owner != null) { // If the item found has a owner.
+
+            if (inventoryItem.owner.id != req.auth.id) { // If the owner differs.
+
+                let currentUser = await UserModel.findOne({_id: req.auth.id}, 'admin');
+  
+                if(currentUser.admin != true){ // If the user is not a Admin
+
+                    console.log('====> Not authorized');
+                    return res.status(403).json(
+                        {
+                            success: false,
+                            message: 'User is not authorized to modify this item.'
+                        }
+                    );
+                }
+            }
+        }
+
+        // If it reaches this point, runs the next middleware.
+        next();
+    } catch (error) {
+        console.log(error);   
+        next(error);
+    }
 }

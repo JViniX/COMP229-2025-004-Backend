@@ -5,9 +5,19 @@ var inventoryController = require('../controllers/inventory');
 var authController = require('../controllers/auth');
 
 router.get('/', inventoryController.getAll);
-router.post('/', authController.requireSign, inventoryController.create);
+router.post('/', 
+    authController.logtoken, 
+    authController.requireSign, 
+    inventoryController.create);
 router.get('/:id', inventoryController.getInventory);
-router.put('/:id', inventoryController.update);
-router.delete('/:id', inventoryController.remove);
+router.put('/:id', 
+    authController.logtoken, 
+    authController.requireSign, 
+    inventoryController.hasAuthorization, 
+    inventoryController.update);
+router.delete('/:id', 
+    authController.logtoken, 
+    authController.requireSign, 
+    inventoryController.remove);
 
 module.exports = router;
