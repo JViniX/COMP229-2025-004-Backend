@@ -13,10 +13,7 @@ const InventorySchema = new Schema(
             uom: String
         },
         // Adds relationship with Users models
-        owner: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        }
+        owner: String
     },
     {
         collection: "inventory"

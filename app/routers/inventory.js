@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var inventoryController = require('../controllers/inventory');
-var authController = require('../controllers/auth');
+var authController = require('../controllers/firebaseAuth');
 
 router.get('/', inventoryController.getAll);
 router.post('/', 
