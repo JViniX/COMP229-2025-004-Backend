@@ -4,6 +4,7 @@ var logger = require('morgan');
 var cors = require('cors');
 
 var db = require('./config/db');
+var firebaseAdmin = require('./config/firebaseAdmin');
 
 var userRouter = require('./app/routers/users');
 var indexRouter = require('./app/routers/index');
@@ -14,6 +15,7 @@ var inventoryRouter = require('./app/routers/inventory');
 var app = express();
 
 db();
+firebaseAdmin();
 
 app.use(cors());
 app.use(express.json());
